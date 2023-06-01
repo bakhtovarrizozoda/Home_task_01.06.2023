@@ -1,0 +1,61 @@
+create table regions (
+	region_id serial primary key,
+	region_name varchar(50)
+);
+insert into regions(region_name) values ('Asia')
+create table countries(
+	country_id serial primary key,
+	country_name varchar(50),
+	region_id int  references  regions(region_id)
+);
+insert into countries(country_name, region_id) values ('Tajikistan', 1)
+create table locations(
+	location_id serial primary key,
+	street_address varchar(50),
+	postal_code int,
+	city varchar(50),
+	state_provine varchar(5),
+	country_id int references countries(country_id)
+);
+insert into locations(street_address, postal_code, city, state_provine, country_id)
+values ('Hamadoni', 93003, 'Kulob', 'TJ', 1)
+create table jobs(
+	job_id serial primary key,
+	job_title varchar(50),
+	min_salary numeric,
+	max_salary numeric
+);
+insert into jobs(job_title, min_salary, max_salary) values ('Csharp Development', 2500, 15000)
+create table employees(
+  employee_id serial primary key,
+  first_name varchar(50),
+  last_name varchar(50),
+  email varchar(100),
+  phone_number varchar(30),
+  department_id int unique references departments(department_id),
+  manager_id int references departments(manager_id),
+  commission numeric,
+  salary numeric,
+  job_id int unique references jobs(job_id),
+  hire_date date
+);
+insert into employees(first_name, last_name, email, phone_number, department_id, manager_id, commission, salary, job_id, hire_date)
+values ('Bakhtovar', 'Rizozoda', 'bakhtovar@gmail.com', '987100301', 1, 1, 10, 3000, 1, '2023-05-28')
+create table departments(
+	department_id serial primary key,
+	department_name varchar(50),
+	manager_id int unique,
+	location_id int references locations(location_id)
+);
+drop table departments
+select * from departments
+insert into departments(department_name, manager_id, location_id) values ('SoftClub', 1, 1)
+
+create table job_history(
+	employee_id int references employees(employee_id),
+	start_date date,
+	end_date date,
+	job_id int references employees(job_id),
+	department_id int references employees(department_id)
+);
+insert into job_history(start_date, end_date, job_id, department_id) values ('2023-03-21', '2023-05-21', 1, 1)
